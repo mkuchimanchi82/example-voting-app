@@ -1,8 +1,10 @@
 pipeline {
-   agent any
-   tools{
-	maven 'Maven 3.6.3'
-   }
+   agent {
+        docker {
+            image 'maven:3.6.1-jdk-8-alpine'
+	    args '-v $HOME/.m2:/root/.m2'
+        }
+    }
    
    stages {
         stage('build') {
@@ -44,7 +46,13 @@ pipeline {
 
     post {	
         always {
-            echo 'the pipeline step is completed succesfully .... '
+            echo 'the pipeline step is completed .... '
         }
+	failure{
+	    echo 'the pipeline step is failed and sending failure message  .... '
+	}
+	success{
+	    echo 'the pipeline step is failed and sending success message  .... '
+	}
     }
 }
